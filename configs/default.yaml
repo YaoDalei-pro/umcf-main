@@ -1,0 +1,57 @@
+# UMCF default hyperparameters (paper Table 3 and Section II–III)
+seed: 42
+device: auto  # auto | cpu | cuda
+
+model:
+  d_s: 10
+  d_v: 10
+  d_f: 16
+  d_c: 20          # coupling dim after PCA
+  d_u: 420         # raw coupling dim: 10*10 + 10*16 + 10*16
+  d_z: 56          # 10+10+16+20
+  tau: 1.0         # Fisher Softmax temperature (Eq. 7)
+  eps: 1.0e-8      # used in all standardizations and Fisher scores
+  use_gi: true
+  use_ce: true     # cross-layer coupling enhancement
+  use_fisher: true
+
+data:
+  n_classes: 5
+  n_per_class: 2000
+  train_ratio: 0.7
+  val_ratio_of_train: 0.1   # inner 10% of training split (confirm tau, d_c)
+  sequence_length: 64       # arc samples before GI
+  n_modalities: 5           # optical, radar, infrared, polarization, spectral
+  snr_db_baseline: 20.0
+  snr_db_list: [0, 5, 10, 15, 20, 25, 30]
+  missing_ratios: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+  geom_jitter_deg: 5.0      # attitude / solar-phase jitter (deg)
+  output_dir: data/processed
+  dataset_name: umcf_semireal.npz
+
+train:
+  repeats: 20
+  confirm_hyperparams: false  # if true, grid-search tau and d_c on inner val
+  tau_grid: [0.5, 1.0, 2.0]
+  dc_grid: [10, 20, 30]
+  save_dir: checkpoints
+
+eval:
+  snr_ref_db: 20.0
+  missing_noise_db: 20.0
+  ablation_noise_db: 10.0
+  ablation_missing_ratio: 0.3
+  plot_dir: results/figures
+  result_dir: results
+
+baselines:
+  dnnf_epochs: 40
+  dnnf_lr: 0.001
+  dnnf_hidden: [128, 64]
+  dnnf_embed: 32
+  dnnf_batch_size: 128
+  lmnn_epochs: 30
+  lmnn_lr: 0.01
+  lmnn_embed: 36
+  cmaf_epochs: 40
+  cmaf_lr: 0.001

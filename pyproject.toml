@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "umcf"
+version = "1.0.0"
+description = "Unified Multimodal Coupled Fingerprint for space-debris identity representation"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "torch>=1.13",
+  "numpy>=1.21",
+  "scipy>=1.7",
+  "PyYAML>=6.0",
+  "tqdm>=4.64",
+  "matplotlib>=3.5",
+  "scikit-learn>=1.1",
+  "sgp4>=2.21",
+  "xgboost>=1.6",
+]
+
+[tool.setuptools.packages.find]
+include = ["umcf*"]
